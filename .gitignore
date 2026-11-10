@@ -1,0 +1,25 @@
+# Virtual environments and IDE settings (contain local paths)
+.venv/
+venv/
+env/
+.idea/
+.vscode/
+
+# Python build and cache files
+__pycache__/
+*.pyc
+*.egg-info/
+build/
+.ipynb_checkpoints/
+
+# Course hand-out (not ours to redistribute)
+FAIML_RL_2026.pdf
+
+# Scratch experiment outputs
+part2/best_models_UDR_prova_*/
+
+# Secrets and OS files
+.env
+*.key
+.DS_Store
+Thumbs.db
