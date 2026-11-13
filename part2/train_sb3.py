@@ -49,25 +49,27 @@ def parse_args() -> argparse.Namespace:
         "--timesteps",
         type=int,
         default=500_000,
-        help="Timestep per ciascun modello"
+        help="Training timesteps for each model"
     )
     parser.add_argument(
         "--num-cpus",
         type=int,
         default=8,
-        help="Numero di CPU per il parallelismo"
+        help="Number of parallel environments (CPUs)"
     )
     parser.add_argument(
         "--eval-episodes",
         type=int,
         default=50,
-        help="Numero di episodi fissi di valutazione"
+        help="Number of fixed-seed evaluation episodes"
     )
     parser.add_argument(
-        "--mass_range",
-        type=tuple,
+        "--mass-range",
+        type=float,
+        nargs=2,
         default=(0.5, 2.0),
-        help="Range to try UDR and ADR"
+        metavar=("MIN", "MAX"),
+        help="Block mass range in kg for UDR and ADR, e.g. --mass-range 0.5 2.0"
     )
     return parser.parse_args()
 

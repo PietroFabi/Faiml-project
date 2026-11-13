@@ -3,7 +3,7 @@ import gymnasium as gym
 from collections import deque
 
 """
-    Wrapper che applica Domain Randomization (UDR o ADR) all'ambiente Panda-Gym.
+    Wrapper that applies domain randomization (UDR or ADR) of the block's mass to the Panda-Gym environment.
 """
 class RandomizationWrapper(gym.Wrapper):
     def __init__(
@@ -11,8 +11,8 @@ class RandomizationWrapper(gym.Wrapper):
             env,
             mass_init,
             mass_range=(0.5, 2.0),
-            mode="none",  # "none", "udr", o "adr"
-            env_type="source", # "source" o "target"
+            mode="none",  # "none", "udr" or "adr"
+            env_type="source", # "source" or "target"
             p_b=0.5,  # Probability of sampling on the borders (ADR)
             buffer_size=100,  # Dimension of the memory for evaluating the difficulty
             high_threshold=0.9,  # Success threshold for expanding the difficulty range

@@ -37,6 +37,8 @@ Success rate and mean return over evaluation episodes with fixed seeds. Mean ret
 
 PPO models were trained for 10M steps, SAC models for 500k steps.
 
+SAC A and SAC B give exactly the same result in all four evaluations (19% success and a mean return of -3.628 on both source and target). A robot that never moves, evaluated on the same 100 seeds, scores exactly the same (19% / -3.628 on both domains). So these two configurations never learned to push the block: the 19% are episodes where the goal spawns close enough to the block's starting position.
+
 ### Final experiments (50 evaluation episodes)
 
 | Training setup | Source: success / mean return | Target: success / mean return |
@@ -77,7 +79,8 @@ Full training and evaluation output is in the `part2/log_*.txt` files.
     ├── HpT_PPO.py              PPO hyperparameter tuning
     ├── HpT_SAC.py              SAC hyperparameter tuning
     ├── HpT_SAC_UDR.py          UDR mass-range comparison
-    ├── prova_SAC_b_*.py        Side experiments (different seed, different learning rate)
+    ├── prova_SAC_b_*.py        Side experiments on SAC B: seed 123, and learning rate 1e-4
+    │                           (the latter is the file named "ent_coeff")
     ├── test_random_policy.py   Random policy on PandaPush, with rendering
     ├── log_*.txt               Console output of every run
     ├── best_models_PPO/        Saved models from PPO tuning
@@ -93,13 +96,23 @@ Each model folder contains `best_model.zip` (the Stable-Baselines3 model) and `v
 
 ## Setup
 
-Python 3.11 was used.
-
 ```bash
 pip install -r requirements.txt
 cd part2/panda-gym
 pip install -e .
 ```
+
+The saved models were trained with this setup (recorded inside each model file):
+
+| Package | Version |
+| --- | --- |
+| Python | 3.11.9 |
+| Stable-Baselines3 | 2.8.0 |
+| PyTorch | 2.7.1 (CUDA 11.8) |
+| Gymnasium | 1.2.3 |
+| NumPy | 1.26.4 |
+
+panda-gym requires NumPy below 2.0. The models also load with newer Stable-Baselines3 releases: re-evaluating `final_models_task6/SAC_UDR_Source` with Stable-Baselines3 2.9.2 on CPU reproduced the logged result exactly (100% / -0.464 on target).
 
 ## Usage
 
@@ -111,6 +124,8 @@ Train (pick the experiment with the `CONFIG` variable at the top of `train_sb3.p
 python train_sb3.py --timesteps 500000 --num-cpus 8
 ```
 
+For CONFIG = 3, the UDR mass range can be changed with `--mass-range 0.5 2.0` (minimum and maximum in kg).
+
 Evaluate a saved model on the target domain:
 
 ```bash
@@ -120,7 +135,7 @@ python eval_sb3.py \
   --algo sac --env-type target
 ```
 
-`eval_sb3.py` opens a rendering window by default.
+`eval_sb3.py` opens a rendering window by default; add `--no-render` to run without one. Use `--episodes N` to change the number of evaluation episodes (default 50).
 
 Reproduce the hyperparameter tuning:
 
@@ -131,6 +146,10 @@ python HpT_SAC_UDR.py --sampling-strategy udr
 ```
 
 The saved models and `.pkl` files use Python's pickle format, as is standard for Stable-Baselines3. Only load model files from sources you trust.
+
+## Author
+
+Pietro Fabi
 
 ## Credits
 

@@ -54,8 +54,8 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--render",
+        action=argparse.BooleanOptionalAction,
         default=False,
-        choices=[True, False],
         help="Render with a window (render_mode='human')",
     )
     parser.add_argument(

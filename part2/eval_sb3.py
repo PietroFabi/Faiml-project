@@ -88,7 +88,8 @@ def evaluate(model_path: str, stats_path: str, n_episodes: int, deterministic: b
 
 
 """
-    Useless since we import the evaluate function into evry file to evaluate in place. 
+    Command-line options for evaluating a saved model on its own. The training scripts do not use this:
+    they import evaluate() directly and call it after training.
 """
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Evaluate PPO/SAC on PandaPush-v3")
@@ -117,10 +118,9 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--render",
-        action="store_true",
+        action=argparse.BooleanOptionalAction,
         default=True,
-        choices=[True, False],
-        help="Render with a window (render_mode='human')",
+        help="Render with a window (render_mode='human'); use --no-render to run headless",
     )
     parser.add_argument(
         "--env-type",
@@ -137,7 +137,9 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 """
-    Useless since we import the evaluate function into evry file to evaluate in place. 
+    Example (run from part2/):
+    python eval_sb3.py --model-path final_models_task6/SAC_UDR_Source/best_model.zip
+        --stats-path final_models_task6/SAC_UDR_Source/vec_normalize.pkl --algo sac --env-type target
 """
 if __name__ == "__main__":
     args = parse_args()
